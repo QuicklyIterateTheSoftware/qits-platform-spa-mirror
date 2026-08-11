@@ -1,0 +1,60 @@
+<header class="head">
+  <div>
+    <h1>OCI upstreams</h1>
+    <p class="lede">
+      The image registries this mirror fronts. {{ lede() }} A docker client naming one of these
+      hosts is answered from the cache when the bytes are already here, and from the registry itself
+      when they are not.
+    </p>
+  </div>
+  <qits-button variant="secondary" size="sm" (pressed)="load()">Refresh</qits-button>
+</header>
+
+<app-async
+  [state]="upstreams()"
+  loadingLabel="Loading the OCI upstreams"
+  errorLabel="Could not load the OCI upstreams"
+  (retry)="load()"
+/>
+
+@if (upstreams().kind === 'ready') {
+  <div class="scroll">
+    <table>
+      <caption>
+        The host is the name a docker client is configured with, which need not be the address the
+        bytes arrive from. Any columns past it are whatever this listing carried.
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Host</th>
+          @for (field of extras(); track field) {
+            <th scope="col">{{ columnLabel(field) }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (upstream of rows(); track upstream.host) {
+          <tr>
+            <th scope="row" class="mono">{{ upstream.host }}</th>
+            @for (field of extras(); track field) {
+              <td>{{ cellText(fieldOf(upstream, field)) }}</td>
+            }
+          </tr>
+        } @empty {
+          <tr>
+            <td [attr.colspan]="extras().length + 1">
+              <app-empty
+                message="No registry is mirrored. Nothing pulls through this service until a row exists here."
+              />
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+
+<p class="note">
+  npm and maven have one upstream each and no table: they are deployment settings on the service,
+  not a set anyone edits. Only the image registries are a list, which is why only they have a page.
+</p>

@@ -1,0 +1,91 @@
+/* The furniture both pages in this app share: a heading block, a data table, a note. Pulled into
+   each page component through `styleUrls` rather than into the global stylesheet, so it stays
+   scoped by Angular's emulated encapsulation and a page can still override a rule locally.
+
+   It is the sibling explorers' sheet, trimmed to what two list pages use. Copied rather than
+   shared for the same reason `Loadable` is: @qits/ui-components carries components, not a
+   stylesheet a consumer can import. */
+
+:host {
+  display: block;
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.head h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  overflow-wrap: anywhere;
+}
+
+.lede {
+  margin: 0.15rem 0 1rem;
+  color: #6b7280;
+}
+
+/* Tables scroll rather than squeeze. These tables draw columns this client has never seen before,
+   so how wide a row wants to be is not something the layout can know in advance. */
+.scroll {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+caption {
+  text-align: left;
+  padding: 0 0 0.4rem;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.4rem 0.75rem 0.4rem 0;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+thead th {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85em;
+}
+
+.subtle {
+  color: #6b7280;
+}
+
+.note {
+  margin: 0.75rem 0 0;
+  color: #6b7280;
+  font-size: 0.88rem;
+}
+
+/* A row that is a statement rather than a record. Italic and full width so it can never be
+   mistaken for one of the rows above it. */
+tfoot td {
+  border-bottom: 0;
+  white-space: normal;
+  padding-top: 0.75rem;
+  color: #6b7280;
+  font-size: 0.88rem;
+  font-style: italic;
+}

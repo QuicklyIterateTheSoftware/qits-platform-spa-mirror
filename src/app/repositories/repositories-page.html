@@ -1,0 +1,64 @@
+<header class="head">
+  <div>
+    <h1>Cached repositories</h1>
+    <p class="lede">
+      What this mirror has pulled through, one repository per format it fronts. {{ lede() }} Nothing
+      here is published: every byte came from an upstream and can be fetched again, which is what
+      lets the nightly eviction run drop whatever nobody has asked for lately.
+    </p>
+  </div>
+  <qits-button variant="secondary" size="sm" (pressed)="load()">Refresh</qits-button>
+</header>
+
+<app-async
+  [state]="repositories()"
+  loadingLabel="Loading the cached repositories"
+  errorLabel="Could not load the cached repositories"
+  (retry)="load()"
+/>
+
+@if (repositories().kind === 'ready') {
+  <div class="scroll">
+    <table>
+      <caption>
+        The columns past Type are whatever this listing carried. They are drawn as the service sent
+        them — a number is a number, never a byte figure this client guessed a unit for.
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Repository</th>
+          <th scope="col">Type</th>
+          @for (field of extras(); track field) {
+            <th scope="col">{{ columnLabel(field) }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (repository of rows(); track repository.name) {
+          <tr>
+            <th scope="row" class="mono">{{ repository.name }}</th>
+            <td [title]="typeSummary(repository.type)">
+              <qits-badge [label]="repository.type" [tone]="typeTone(repository.type)" />
+            </td>
+            @for (field of extras(); track field) {
+              <td>{{ cellText(fieldOf(repository, field)) }}</td>
+            }
+          </tr>
+        } @empty {
+          <tr>
+            <td [attr.colspan]="extras().length + 2">
+              <app-empty
+                message="This mirror has cached nothing yet. Pull something through it and the repository appears here."
+              />
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+
+<p class="note">
+  This is the mirror, not the store. What the platform publishes itself — its own images, packages
+  and daemon binaries — lives in qits-artifacts, at <code>/artifacts/</code>, with its own explorer.
+</p>
