@@ -2,6 +2,7 @@ import type { Routes } from '@angular/router';
 import { QitsMainLayout } from '@qits/ui-components';
 import { NotFound } from './not-found/not-found';
 import { RepositoriesPage } from './repositories/repositories-page';
+import { RepositoryPage } from './repositories/repository-page';
 import { UpstreamsPage } from './upstreams/upstreams-page';
 
 /**
@@ -33,6 +34,7 @@ export const routes: Routes = [
     component: QitsMainLayout,
     children: [
       { path: '', component: RepositoriesPage },
+      { path: 'repositories/:repository', component: RepositoryPage },
       { path: 'upstreams', component: UpstreamsPage },
       { path: '**', component: NotFound },
     ],

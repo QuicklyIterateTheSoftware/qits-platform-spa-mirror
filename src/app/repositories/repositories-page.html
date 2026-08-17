@@ -36,7 +36,9 @@
       <tbody>
         @for (repository of rows(); track repository.name) {
           <tr>
-            <th scope="row" class="mono">{{ repository.name }}</th>
+            <th scope="row" class="mono">
+              <a [routerLink]="['/repositories', repository.name]">{{ repository.name }}</a>
+            </th>
             <td [title]="typeSummary(repository.type)">
               <qits-badge [label]="repository.type" [tone]="typeTone(repository.type)" />
             </td>

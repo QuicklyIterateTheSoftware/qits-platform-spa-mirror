@@ -1,0 +1,40 @@
+<a class="back" routerLink="/">← Cached repositories</a>
+<header class="head">
+  <div>
+    <div class="eyebrow">Cache contents</div>
+    <h1 class="mono">{{ name }}</h1>
+    @if (data(); as repositoryData) {
+      <p class="lede"><qits-badge [label]="repositoryData.repository.type" [tone]="typeTone(repositoryData.repository.type)" />
+        {{ repositoryData.packages.length }} packages · {{ totalVersions() }} cached versions
+      </p>
+    }
+  </div>
+  <qits-button variant="secondary" size="sm" (pressed)="load()">Refresh</qits-button>
+</header>
+<app-async [state]="state()" loadingLabel="Loading cached packages" errorLabel="Could not load cached packages" (retry)="load()" />
+@if (state().kind === 'ready') {
+  <label class="search"><span>Search packages</span><input type="search" placeholder="Filter by package or image name…" [value]="query()" (input)="setQuery($event)" /></label>
+  @if (packages().length) {
+    <div class="browser">
+      <section class="package-list" aria-label="Cached packages">
+        @for (item of packages(); track item.name) {
+          <button type="button" [class.active]="selected()?.name === item.name" (click)="choose(item)">
+            <span class="mono package-name">{{ item.name }}</span>
+            <span class="subtle">{{ item.versions.length }} versions · {{ bytes(item.sizeBytes) }}</span>
+          </button>
+        }
+      </section>
+      @if (selected(); as item) {
+        <section class="details">
+          <div class="eyebrow">Package</div><h2 class="mono">{{ item.name }}</h2>
+          <div class="scroll"><table><thead><tr><th>Version / digest</th><th>Tags</th><th>Files</th><th>Size</th><th>Last used</th></tr></thead>
+            <tbody>@for (version of item.versions; track version.version) {<tr>
+              <th class="mono">{{ version.version }}</th><td>{{ version.labels.join(', ') || '—' }}</td>
+              <td [title]="version.files.join('\n')">{{ version.files.length || '—' }}</td><td>{{ bytes(version.sizeBytes) }}</td>
+              <td>{{ version.lastAccessedAt ? (version.lastAccessedAt.slice(0, 10)) : 'Never' }}</td>
+            </tr>}</tbody></table></div>
+        </section>
+      }
+    </div>
+  } @else { <app-empty message="No cached packages match this search." /> }
+}

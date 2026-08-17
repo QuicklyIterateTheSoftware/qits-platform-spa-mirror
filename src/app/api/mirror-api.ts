@@ -6,6 +6,7 @@ import type {
   MirrorRepositoryDto,
   OciUpstreamDto,
   RepositoriesResponse,
+  RepositoryPackagesResponse,
   UpstreamsResponse,
 } from './dto';
 
@@ -49,6 +50,14 @@ export class MirrorApi {
       this.http.get<RepositoriesResponse>(`${this.base}/mirror/api/repositories`),
     );
     return response.repositories;
+  }
+
+  async packages(repository: string): Promise<RepositoryPackagesResponse> {
+    return firstValueFrom(
+      this.http.get<RepositoryPackagesResponse>(
+        `${this.base}/mirror/api/repositories/${encodeURIComponent(repository)}/packages`,
+      ),
+    );
   }
 
   /**
