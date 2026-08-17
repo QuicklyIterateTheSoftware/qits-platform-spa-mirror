@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { QitsBadge, QitsButton } from '@qits/ui-components';
 import { MirrorApi } from '../api/mirror-api';
 import type { MirrorRepositoryDto } from '../api/dto';
@@ -31,7 +32,7 @@ const PROMISED = ['name', 'type'] as const;
 @Component({
   selector: 'app-repositories-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Async, Empty, QitsBadge, QitsButton],
+  imports: [Async, Empty, QitsBadge, QitsButton, RouterLink],
   templateUrl: './repositories-page.html',
   styleUrls: ['../ui/page.css'],
 })
