@@ -1,6 +1,6 @@
 {
   "name": "qits-platform-spa-mirror",
-  "version": "2026.817.175441",
+  "version": "2026.819.184111",
   "private": true,
   "description": "The pull-through mirror's frontend: an Angular application that consumes @qits/ui-components from qits' own npm registry. It ships no image — qits-platform-mirror serves it via Quinoa at /mirror/.",
   "license": "MIT",
